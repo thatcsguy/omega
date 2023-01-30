@@ -1,0 +1,181 @@
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<style>
+.towerButton {
+	font-size: 100;
+	border: 1px solid black;
+	width: 440px;
+	height:100px;
+	text-align: center;
+	float: left;
+	margin-left: 10px;
+	cursor: pointer;
+	color: green;
+	background-color: darkgray;
+}
+
+.answer {
+	font-size: 100;
+	width: 400px;
+	height:100px;
+	background-color: darkgray;
+	border: 1px solid black;
+	float: left;
+	margin:10px;
+	text-align: center;
+}
+
+.results {
+	width:900px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.wrap {
+	width: 950px;
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.mark {
+	font-size: 100;
+	border: 1px solid black;
+	width: 100px;
+	height:100px;
+	text-align: center;
+	float: left;
+	margin-left: 10px;
+	cursor: pointer;
+	background-color: darkgray;
+}
+.markA,.mark1 {
+	color: red
+}
+.markB,.mark2 {
+	color: yellow
+}
+.markC,.mark3 {
+	color: blue
+}
+.markD,.mark4 {
+	color: purple
+}
+
+h1 {
+	margin:0 0 0 0
+}
+</style>
+
+<script>
+const fiveTower = [0,2,3,5,3,5,6,0]
+const sixTower = [0,2,3,5,2,4,5,7]
+
+const htmlStrings = [
+	'<span style="color:red">A</span>',
+	'<span style="color:red">1</span>',
+	'<span style="color:yellow">B</span>',
+	'<span style="color:yellow">2</span>',
+	'<span style="color:blue">C</span>',
+	'<span style="color:blue">3</span>',
+	'<span style="color:purple">D</span>',
+	'<span style="color:purple">4</span>',
+]
+
+let towers = -1
+let marker = -1
+
+const setTowers = (n) => {
+	towers = n
+	update()
+}
+
+const setMarker = (n) => {
+	marker = n
+	update()
+}
+
+const reset = () => {
+	towers = -1
+	marker = -1
+	$('.towers>.towerButton').css('background-color','darkgray')
+	$('.marks>.mark').css('background-color','darkgray')
+	$('.results').html('')
+	update();
+}
+
+const update = () => {
+	if(towers >= 0 && marker >= 0) {
+		$('.results').html('')
+
+		if(towers == 5) {
+			
+			for(let n=0;n<8;n++) {
+				let index = (fiveTower[(marker+8-n)%8] + n)%8
+				console.log("Go to: " + "A1B2C3D4".charAt(index))
+			
+				$('.results').html($('.results').html() + "<div class='answer'>" + htmlStrings[n] + " => " + htmlStrings[index] + "</answer>")
+			}
+			
+		} else if (towers == 6) {
+			for(let n=0;n<8;n++) {
+				let index = (sixTower[(marker+8-n)%8] + n)%8
+				console.log("Go to: " + "A1B2C3D4".charAt(index))
+			
+				$('.results').html($('.results').html() + "<div class='answer'>" + htmlStrings[n] + " => " + htmlStrings[index] + "/" + htmlStrings[(index+1)%8] + "</answer>")
+			}
+		}
+		setTimeout(() => {reset();}, 10000)
+	}
+}
+
+$( document ).ready(function() {
+	$('.towers>.towerButton').click(function(){
+		$('.towers>.towerButton').css('background-color','darkgray')
+		$(this).css('background-color','black')
+	});
+
+	$('.marks>.mark').click(function(){
+		$('.marks>.mark').css('background-color','darkgray')
+		$(this).css('background-color','black')
+	});
+	
+	$('.norths>.mark').click(function(){
+		$('.norths>.mark').css('background-color','darkgray')
+		$(this).css('background-color','black')
+	});
+});
+
+
+</script>
+</head>
+
+<body>
+<div class='wrap'>
+<h1>TOWERS:</h1>
+<div class='towers' style='width:100%;height: 150px;'>
+<div class='towerButton' onclick='setTowers(5)'>stretch - 5</div>
+<div class='towerButton' onclick='setTowers(6)'>close - 6</div>
+</div>
+
+<h1>YOUR WAYMARK:</h1>
+<div class='marks' style='width:100%;height: 150px;'>
+<div class='mark markA' onclick='setMarker(0)'>A</div>
+<div class='mark mark1' onclick='setMarker(1)'>1</div>
+<div class='mark markB' onclick='setMarker(2)'>B</div>
+<div class='mark mark2' onclick='setMarker(3)'>2</div>
+<div class='mark markC' onclick='setMarker(4)'>C</div>
+<div class='mark mark3' onclick='setMarker(5)'>3</div>
+<div class='mark markD' onclick='setMarker(6)'>D</div>
+<div class='mark mark4' onclick='setMarker(7)'>4</div>
+</div>
+
+<h1>NORTH => DESTINATION:</h1>
+<div class='results'>
+</div>
+
+</div>
+</body>
+</html>
